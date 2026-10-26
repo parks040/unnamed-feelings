@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unnamed Feelings</title>
+<style>
+/* InOut: put the font file in /fonts and uncomment
+@font-face { font-family: 'InOut'; src: url('fonts/InOut.woff2') format('woff2'); font-display: swap; }
+*/
+:root { --ink: #000; --mute: rgba(0,0,0,.55); --faint: rgba(0,0,0,.4); --rule: rgba(0,0,0,.18); --rule2: rgba(0,0,0,.12); --m: 48px; --g: 12px; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font-family: 'InOut', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.45; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+button:focus-visible, input:focus-visible { outline: 1px solid #000; outline-offset: 3px; }
+.wrap { padding: 28px var(--m) 96px; min-height: 100vh; }
+
+
+.hero { padding: 32px 0 28px; display: flex; flex-direction: column; gap: 14px; }
+.hero h1 button { font-size: inherit; line-height: inherit; letter-spacing: inherit; }
+.hero h1 { margin: 0; font-size: 88px; font-weight: 400; line-height: .95; letter-spacing: -.03em; }
+.hero p { margin: 0; font-size: 15px; color: rgba(0,0,0,.6); }
+
+.bar { border-top: 1px solid var(--rule); padding: 14px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; font-size: 12px; letter-spacing: .04em; }
+.bar label { display: flex; align-items: center; gap: 10px; flex: 1 1 240px; min-width: 0; }
+.bar .k { color: var(--mute); }
+.bar input { flex: 1; min-width: 0; border: 0; border-bottom: 1px solid rgba(0,0,0,.25); padding: 6px 0; font: inherit; font-size: 13px; background: transparent; outline: none; }
+.tog { opacity: .4; min-height: 32px; }
+.tog.on { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+.pair { display: flex; gap: 8px; align-items: center; }
+
+.dayhead { border-top: 1px solid var(--rule); padding: 36px 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; }
+.dayhead h2 { margin: 0; font-size: 28px; font-weight: 400; letter-spacing: -.01em; }
+.dayhead h2 span { color: rgba(0,0,0,.45); }
+.dayhead .count { font-size: 12px; letter-spacing: .06em; }
+
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--g); }
+.cell { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.frame { width: 100%; aspect-ratio: 1 / 1; background: #fff; display: flex; align-items: center; justify-content: center; }
+.frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.cell:hover .frame { outline: 1px solid #000; outline-offset: -1px; }
+.cap { opacity: 0; transition: opacity .2s ease; display: flex; flex-direction: column; gap: 2px; font-size: 12px; min-height: 48px; }
+.cap .s { font-size: 14px; }
+.cap .d { color: var(--mute); }
+.cell:hover .cap, .cell:focus-visible .cap { opacity: 1; }
+
+.list { border-top: 1px solid var(--rule); }
+.row { width: 100%; display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--rule2); }
+.row:hover { background: rgba(0,0,0,.03); }
+.row img { width: 72px; height: 72px; object-fit: contain; display: block; }
+.row .t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.row .t b { font-weight: 400; font-size: 16px; }
+.row .t i { font-style: normal; font-size: 12px; color: var(--mute); }
+.row .meta { display: flex; gap: 32px; font-size: 12px; letter-spacing: .04em; }
+.empty { margin: 0; padding: 48px 0; color: var(--mute); font-size: 14px; }
+
+.dnav { margin-top: 40px; border-top: 1px solid var(--rule); padding: 14px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 12px; letter-spacing: .06em; }
+.dnav span { display: flex; gap: 24px; align-items: center; }
+.dnav button { min-height: 32px; }
+.detail { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; padding-top: 24px; }
+.dside { display: flex; flex-direction: column; gap: 32px; }
+.dtitle { display: flex; flex-direction: column; gap: 10px; }
+.dtitle h1 { margin: 0; font-size: 56px; font-weight: 400; line-height: 1; letter-spacing: -.02em; }
+.ghead { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 8px; font-size: 11px; letter-spacing: .08em; }
+.ghead span:last-child { color: rgba(0,0,0,.45); }
+.mrow { display: grid; grid-template-columns: 28px minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px; padding: 8px 0; border-top: 1px solid var(--rule2); }
+.mrow .n { color: rgba(0,0,0,.45); }
+.mrow .k { color: rgba(0,0,0,.6); }
+.mrow .nr { color: rgba(0,0,0,.45); }
+.block { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 20px; }
+.block h2 { margin: 0 0 14px; font-size: 12px; font-weight: 400; letter-spacing: .08em; }
+.block p { margin: 0; font-size: 14px; color: var(--mute); max-width: 640px; }
+.block .cap { opacity: 1; min-height: 0; }
+
+footer { margin-top: 96px; border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 11px; letter-spacing: .06em; color: var(--mute); }
+
+@media (max-width: 1024px) { :root { --m: 24px; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .detail { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { :root { --m: 16px; } .hero h1 { font-size: 48px; } .row .meta { display: none; } }
+@media (max-width: 420px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .cap { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="app"></main>
+  <footer>
+    <span>NOT EVERY FEELING HAS A NAME.</span>
+    <span>ORIGINALS · 4 × 6 IN</span>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   ARCHIVE DATA
+   Add new records here. Unknown fields stay null
+   and display as "Not recorded". Never fill in guesses.
+   ========================================================= */
+const RECORDS = [
+  { id: 'UF-20260829-001', sentence: 'Anxiety',       sid: 'S-001', date: '2026-08-29', img: 'images/UF-20260829-001.png' },
+  { id: 'UF-20260829-002', sentence: 'Sense of Loss', sid: 'S-002', date: '2026-08-29', img: 'images/UF-20260829-002.jpg' },
+  { id: 'UF-20260829-003', sentence: 'Discomfort',    sid: 'S-003', date: '2026-08-29', img: 'images/UF-20260829-003.jpg' },
+  { id: 'UF-20260829-004', sentence: 'Comfort',       sid: 'S-004', date: '2026-08-29', img: 'images/UF-20260829-004.jpg' },
+  { id: 'UF-20260831-001', sentence: 'Freedom + Ease',         sid: 'S-005', date: '2026-08-31', img: 'images/UF-20260831-001.jpg' },
+  { id: 'UF-20260831-002', sentence: 'Novelty + Awkwardness',  sid: 'S-006', date: '2026-08-31', img: 'images/UF-20260831-002.jpg' },
+  { id: 'UF-20260831-003', sentence: 'Contemplation + Going with the Flow + Comfort = An Unnameable Feeling', sid: 'S-007', date: '2026-08-31', img: 'images/UF-20260831-003.jpg' },
+  { id: 'UF-20260831-004', sentence: 'Reminiscence + Romance', sid: 'S-008', date: '2026-08-31', img: 'images/UF-20260831-004.jpg' },
+  { id: 'UF-20260831-005', sentence: 'Curiosity + Boldness = What Is This Feeling? Following My Instincts', sid: 'S-009', date: '2026-08-31', img: 'images/UF-20260831-005.png' },
+  { id: 'UF-20260902-001', sentence: 'Feeling Like I\'m in Another World + Listening to Music = A Fleeting Emotion', sid: 'S-010', date: '2026-09-02', img: 'images/UF-20260902-001.jpg' },
+  { id: 'UF-20260902-002', sentence: 'Anticipation with a Hint of Nervousness', sid: 'S-011', date: '2026-09-02', img: 'images/UF-20260902-002.jpg' },
+  { id: 'UF-20260903-001', sentence: 'Following my instincts', sid: 'S-012', date: '2026-09-03', img: 'images/UF-20260903-001.jpg' },
+  { id: 'UF-20260903-002', sentence: 'Sunlight came through the window', sid: 'S-013', date: '2026-09-03', img: 'images/UF-20260903-002.jpg' },
+  { id: 'UF-20260903-003', sentence: 'On a Beautiful Day', sid: 'S-014', date: '2026-09-03', img: 'images/UF-20260903-003.jpg' },
+  { id: 'UF-20260903-004', sentence: 'Coloring the Scenery Before Me with Clusters of Emotions', sid: 'S-015', date: '2026-09-03', img: 'images/UF-20260903-004.jpg' },
+  { id: 'UF-20260903-005', sentence: 'The Sky Suddenly Darkens', sid: 'S-016', date: '2026-09-03', img: 'images/UF-20260903-005.jpg' },
+  { id: 'UF-20260903-006', sentence: 'Simply Emptying My Mind', sid: 'S-017', date: '2026-09-03', img: 'images/UF-20260903-006.jpg' },
+  { id: 'UF-20260903-007', sentence: 'The Sky Suddenly Darkens and Brightens Again', sid: 'S-018', date: '2026-09-03', img: 'images/UF-20260903-007.jpg' },
+  { id: 'UF-20260906-001', sentence: 'Remembering How Happy I Was Yesterday', sid: 'S-019', date: '2026-09-06', img: 'images/UF-20260906-001.jpg' },
+  { id: 'UF-20260906-002', sentence: 'Listening to Music', sid: 'S-020', date: '2026-09-06', img: 'images/UF-20260906-002.jpg' },
+  { id: 'UF-20260906-003', sentence: 'Thinking Back to the Concert on Friday, September 4', sid: 'S-021', date: '2026-09-06', img: 'images/UF-20260906-003.jpg' },
+  { id: 'UF-20260906-004', sentence: 'Hello World', sid: 'S-022', date: '2026-09-06', img: 'images/UF-20260906-004.jpg' },
+  { id: 'UF-20260906-005', sentence: '?', sid: 'S-023', date: '2026-09-06', img: 'images/UF-20260906-005.jpg' },
+  { id: 'UF-20260906-006', sentence: 'Tap, Tap, Tap', sid: 'S-024', date: '2026-09-06', img: 'images/UF-20260906-006.jpg' },
+  { id: 'UF-20260906-007', sentence: 'Lost in the Grandeur of the Music', sid: 'S-025', date: '2026-09-06', img: 'images/UF-20260906-007.jpg' },
+  { id: 'UF-20260906-008', sentence: 'A Slight Sense of Discomfort', sid: 'S-026', date: '2026-09-06', img: 'images/UF-20260906-008.png' },
+  { id: 'UF-20260906-009', sentence: 'Keep Moving Forward', sid: 'S-027', date: '2026-09-06', img: 'images/UF-20260906-009.png' },
+  { id: 'UF-20260906-010', sentence: 'Intensity', sid: 'S-028', date: '2026-09-06', img: 'images/UF-20260906-010.jpg' },
+  { id: 'UF-20260906-011', sentence: 'Fragments of Memory', sid: 'S-029', date: '2026-09-06', img: 'images/UF-20260906-011.jpg' },
+  { id: 'UF-20260906-012', sentence: 'Softness', sid: 'S-030', date: '2026-09-06', img: 'images/UF-20260906-012.jpg' },
+  { id: 'UF-20260906-013', sentence: 'Embracing + Expanding My World', sid: 'S-031', date: '2026-09-06', img: 'images/UF-20260906-013.jpg' },
+  { id: 'UF-20260907-001', sentence: 'Overwhelmed + Slightly Dizzy', sid: 'S-032', date: '2026-09-07', img: 'images/UF-20260907-001.jpg' },
+  { id: 'UF-20260907-002', sentence: 'Sleepy, Yet Not Sleepy', sid: 'S-033', date: '2026-09-07', img: 'images/UF-20260907-002.jpg' },
+  { id: 'UF-20260907-003', sentence: 'A Lingering Sense of Discomfort', sid: 'S-034', date: '2026-09-07', img: 'images/UF-20260907-003.jpg' },
+  { id: 'UF-20260907-004', sentence: 'Surrounded by a Strong Scent of Perfume', sid: 'S-035', date: '2026-09-07', img: 'images/UF-20260907-004.jpg' },
+  { id: 'UF-20260907-005', sentence: 'Feeling a Little More at Ease', sid: 'S-036', date: '2026-09-07', img: 'images/UF-20260907-005.jpg' },
+  { id: 'UF-20260908-001', sentence: 'Refreshment', sid: 'S-037', date: '2026-09-08', img: 'images/UF-20260908-001.jpg' },
+  { id: 'UF-20260908-002', sentence: 'Listening to Hymn for the Weekend in the Morning', sid: 'S-038', date: '2026-09-08', img: 'images/UF-20260908-002.jpg' },
+  { id: 'UF-20260908-003', sentence: 'A Touch of Beautiful Weather', sid: 'S-039', date: '2026-09-08', img: 'images/UF-20260908-003.jpg' },
+  { id: 'UF-20260908-004', sentence: 'Clear Air', sid: 'S-040', date: '2026-09-08', img: 'images/UF-20260908-004.jpg' },
+  { id: 'UF-20260908-005', sentence: 'Woody Scent', sid: 'S-041', date: '2026-09-08', img: 'images/UF-20260908-005.jpg' },
+  { id: 'UF-20260908-006', sentence: 'Oud Wood — Tom Ford', sid: 'S-042', date: '2026-09-08', img: 'images/UF-20260908-006.jpg' },
+  { id: 'UF-20260908-007', sentence: 'Putting My Thoughts on Pause', sid: 'S-043', date: '2026-09-08', img: 'images/UF-20260908-007.jpg' },
+  { id: 'UF-20260908-008', sentence: 'Humming Along', sid: 'S-044', date: '2026-09-08', img: 'images/UF-20260908-008.jpg' },
+  { id: 'UF-20260908-009', sentence: 'A Gentle Breeze', sid: 'S-045', date: '2026-09-08', img: 'images/UF-20260908-009.jpg' },
+  { id: 'UF-20260908-010', sentence: 'Moving to the Rhythm', sid: 'S-046', date: '2026-09-08', img: 'images/UF-20260908-010.jpg' },
+  { id: 'UF-20260908-011', sentence: 'Podcast', sid: 'S-047', date: '2026-09-08', img: 'images/UF-20260908-011.png' },
+  { id: 'UF-20260908-012', sentence: 'Accent', sid: 'S-048', date: '2026-09-08', img: 'images/UF-20260908-012.jpg' },
+  { id: 'UF-20260908-013', sentence: 'Voice', sid: 'S-049', date: '2026-09-08', img: 'images/UF-20260908-013.jpg' },
+  { id: 'UF-20260908-014', sentence: 'Learning', sid: 'S-050', date: '2026-09-08', img: 'images/UF-20260908-014.jpg' },
+  { id: 'UF-20260908-015', sentence: 'Listening to Someone\'s Voice', sid: 'S-051', date: '2026-09-08', img: 'images/UF-20260908-015.jpg' },
+  { id: 'UF-20260908-016', sentence: 'Sunlight', sid: 'S-052', date: '2026-09-08', img: 'images/UF-20260908-016.jpg' },
+  { id: 'UF-20260908-017', sentence: 'The Blue Sky Reflected in the Window', sid: 'S-053', date: '2026-09-08', img: 'images/UF-20260908-017.png' },
+  { id: 'UF-20260908-018', sentence: 'Following My Heart', sid: 'S-054', date: '2026-09-08', img: 'images/UF-20260908-018.jpg' },
+  { id: 'UF-20260908-019', sentence: 'Immersion', sid: 'S-055', date: '2026-09-08', img: 'images/UF-20260908-019.jpg' },
+  { id: 'UF-20260908-020', sentence: 'Tap, Tap, Tap', sid: 'S-024', date: '2026-09-08', img: 'images/UF-20260908-020.jpg' },
+  { id: 'UF-20260908-021', sentence: 'Getting Lost in It', sid: 'S-056', date: '2026-09-08', img: 'images/UF-20260908-021.jpg' },
+  { id: 'UF-20260908-022', sentence: 'Oh, I\'m So Happy', sid: 'S-057', date: '2026-09-08', img: 'images/UF-20260908-022.jpg' },
+  { id: 'UF-20260908-023', sentence: 'It\'s Getting Brighter', sid: 'S-058', date: '2026-09-08', img: 'images/UF-20260908-023.jpg' },
+  { id: 'UF-20260908-024', sentence: 'Feeling Refreshed', sid: 'S-059', date: '2026-09-08', img: 'images/UF-20260908-024.jpg' },
+  { id: 'UF-20260908-025', sentence: 'A Slight Sense of Discomfort', sid: 'S-026', date: '2026-09-08', img: 'images/UF-20260908-025.jpg' },
+  { id: 'UF-20260908-026', sentence: 'Reminiscence', sid: 'S-060', date: '2026-09-08', img: 'images/UF-20260908-026.jpg' },
+  { id: 'UF-20260908-027', sentence: 'What Is This Feeling?', sid: 'S-061', date: '2026-09-08', img: 'images/UF-20260908-027.jpg' },
+  { id: 'UF-20260908-028', sentence: 'What Could This Be?', sid: 'S-062', date: '2026-09-08', img: 'images/UF-20260908-028.jpg' },
+  { id: 'UF-20260909-001', sentence: 'The Death of Peace of Mind — Bad Omens', sid: 'S-063', date: '2026-09-09', img: 'images/UF-20260909-001.jpg' },
+  { id: 'UF-20260909-002', sentence: 'Listening', sid: 'S-064', date: '2026-09-09', img: 'images/UF-20260909-002.jpg' },
+  { id: 'UF-20260909-003', sentence: 'My Stomach Hurt', sid: 'S-065', date: '2026-09-09', img: 'images/UF-20260909-003.jpg' },
+  { id: 'UF-20260909-004', sentence: 'It\'s Getting Better', sid: 'S-066', date: '2026-09-09', img: 'images/UF-20260909-004.jpg' },
+  { id: 'UF-20260909-005', sentence: 'A Little Hungry', sid: 'S-067', date: '2026-09-09', img: 'images/UF-20260909-005.jpg' },
+  { id: 'UF-20260909-006', sentence: 'To the Rhythm', sid: 'S-068', date: '2026-09-09', img: 'images/UF-20260909-006.jpg' },
+  { id: 'UF-20260909-007', sentence: 'Drawing', sid: 'S-069', date: '2026-09-09', img: 'images/UF-20260909-007.jpg' },
+  { id: 'UF-20260909-008', sentence: 'Pupil', sid: 'S-070', date: '2026-09-09', img: 'images/UF-20260909-008.jpg' },
+  { id: 'UF-20260909-009', sentence: 'Letting Go', sid: 'S-071', date: '2026-09-09', img: 'images/UF-20260909-009.jpg' },
+  { id: 'UF-20260909-010', sentence: 'Oh, Whatever', sid: 'S-072', date: '2026-09-09', img: 'images/UF-20260909-010.jpg' },
+  { id: 'UF-20260909-011', sentence: 'Soft', sid: 'S-073', date: '2026-09-09', img: 'images/UF-20260909-011.jpg' },
+  { id: 'UF-20260909-012', sentence: 'My Stomach Hurts', sid: 'S-074', date: '2026-09-09', img: 'images/UF-20260909-012.jpg' },
+  { id: 'UF-20260909-013', sentence: 'This Is Hard', sid: 'S-075', date: '2026-09-09', img: 'images/UF-20260909-013.jpg' },
+  { id: 'UF-20260909-014', sentence: 'My Stomach Is Killing Me', sid: 'S-076', date: '2026-09-09', img: 'images/UF-20260909-014.jpg' },
+  { id: 'UF-20260909-015', sentence: 'I\'m Bored', sid: 'S-077', date: '2026-09-09', img: 'images/UF-20260909-015.jpg' },
+  { id: 'UF-20260909-016', sentence: 'What Is This?', sid: 'S-078', date: '2026-09-09', img: 'images/UF-20260909-016.jpg' },
+  { id: 'UF-20260909-017', sentence: 'Tingling Sensation', sid: 'S-079', date: '2026-09-09', img: 'images/UF-20260909-017.jpg' },
+  { id: 'UF-20260909-018', sentence: 'Let Me Feel at Ease', sid: 'S-080', date: '2026-09-09', img: 'images/UF-20260909-018.jpg' },
+  { id: 'UF-20260909-019', sentence: 'Stillness', sid: 'S-081', date: '2026-09-09', img: 'images/UF-20260909-019.png' },
+  { id: 'UF-20260909-020', sentence: 'Who Am I?', sid: 'S-082', date: '2026-09-09', img: 'images/UF-20260909-020.jpg' },
+  { id: 'UF-20260909-021', sentence: 'One Thought Leads to Another', sid: 'S-083', date: '2026-09-09', img: 'images/UF-20260909-021.jpg' },
+  { id: 'UF-20260909-022', sentence: 'I Just Remembered!', sid: 'S-084', date: '2026-09-09', img: 'images/UF-20260909-022.jpg' },
+  { id: 'UF-20260909-023', sentence: 'How Should I Live My Life from Here?', sid: 'S-085', date: '2026-09-09', img: 'images/UF-20260909-023.png' },
+  { id: 'UF-20260909-024', sentence: 'Happily?', sid: 'S-086', date: '2026-09-09', img: 'images/UF-20260909-024.jpg' },
+  { id: 'UF-20260909-025', sentence: 'A Pocket Full of Thoughts', sid: 'S-087', date: '2026-09-09', img: 'images/UF-20260909-025.jpg' },
+  { id: 'UF-20260909-026', sentence: 'Being Pulled In Like a Black Hole', sid: 'S-088', date: '2026-09-09', img: 'images/UF-20260909-026.jpg' },
+  { id: 'UF-20260909-027', sentence: 'Ah, Whatever', sid: 'S-089', date: '2026-09-09', img: 'images/UF-20260909-027.jpg' },
+  { id: 'UF-20260909-028', sentence: 'Maybe Next Time', sid: 'S-090', date: '2026-09-09', img: 'images/UF-20260909-028.jpg' },
+  { id: 'UF-20260909-029', sentence: 'Unrefined', sid: 'S-091', date: '2026-09-09', img: 'images/UF-20260909-029.jpg' },
+  { id: 'UF-20260909-030', sentence: 'Everything Will Be Okay', sid: 'S-092', date: '2026-09-09', img: 'images/UF-20260909-030.jpg' },
+  { id: 'UF-20260909-031', sentence: 'I Can Do It', sid: 'S-093', date: '2026-09-09', img: 'images/UF-20260909-031.jpg' },
+  { id: 'UF-20260910-001', sentence: 'So Annoying', sid: 'S-094', date: '2026-09-10', img: 'images/UF-20260910-001.jpg' },
+  { id: 'UF-20260910-002', sentence: 'It Still Hurts', sid: 'S-095', date: '2026-09-10', img: 'images/UF-20260910-002.png' },
+  { id: 'UF-20260910-003', sentence: 'Without Thinking', sid: 'S-096', date: '2026-09-10', img: 'images/UF-20260910-003.jpg' },
+  { id: 'UF-20260910-004', sentence: 'Feeling Angry', sid: 'S-097', date: '2026-09-10', img: 'images/UF-20260910-004.jpg' },
+  { id: 'UF-20260910-005', sentence: 'It\'ll Get Better, Right?', sid: 'S-098', date: '2026-09-10', img: 'images/UF-20260910-005.jpg' },
+  { id: 'UF-20260910-006', sentence: 'Something Within Me', sid: 'S-099', date: '2026-09-10', img: 'images/UF-20260910-006.jpg' },
+  { id: 'UF-20260910-007', sentence: 'Overcoming', sid: 'S-100', date: '2026-09-10', img: 'images/UF-20260910-007.jpg' },
+  { id: 'UF-20260911-001', sentence: 'Anxiety + Anger', sid: 'S-101', date: '2026-09-11', img: 'images/UF-20260911-001.jpg' },
+  { id: 'UF-20260911-002', sentence: 'What Am I Going to Do?', sid: 'S-102', date: '2026-09-11', img: 'images/UF-20260911-002.jpg' },
+  { id: 'UF-20260911-003', sentence: 'What Am I Really Going to Do?', sid: 'S-103', date: '2026-09-11', img: 'images/UF-20260911-003.jpg' },
+  { id: 'UF-20260911-004', sentence: 'Fear', sid: 'S-104', date: '2026-09-11', img: 'images/UF-20260911-004.jpg' },
+  { id: 'UF-20260911-005', sentence: 'Worry + Fear', sid: 'S-105', date: '2026-09-11', img: 'images/UF-20260911-005.jpg' },
+  { id: 'UF-20260911-006', sentence: 'Like a Monster', sid: 'S-106', date: '2026-09-11', img: 'images/UF-20260911-006.jpg' },
+  { id: 'UF-20260911-007', sentence: 'Sinking', sid: 'S-107', date: '2026-09-11', img: 'images/UF-20260911-007.jpg' },
+  { id: 'UF-20260911-008', sentence: 'Inner Peace', sid: 'S-108', date: '2026-09-11', img: 'images/UF-20260911-008.jpg' },
+  { id: 'UF-20260911-009', sentence: 'It\'ll Get Better, Right?', sid: 'S-098', date: '2026-09-11', img: 'images/UF-20260911-009.jpg' },
+  { id: 'UF-20260911-010', sentence: 'Finding My Peace Again', sid: 'S-109', date: '2026-09-11', img: 'images/UF-20260911-010.jpg' },
+  { id: 'UF-20260911-011', sentence: 'Let Me Be Okay', sid: 'S-110', date: '2026-09-11', img: 'images/UF-20260911-011.jpg' },
+  { id: 'UF-20260911-012', sentence: 'I Feel Anxious', sid: 'S-111', date: '2026-09-11', img: 'images/UF-20260911-012.jpg' },
+  { id: 'UF-20260911-013', sentence: 'What Am I Going to Do?', sid: 'S-102', date: '2026-09-11', img: 'images/UF-20260911-013.jpg' },
+  { id: 'UF-20260911-014', sentence: 'Countless Imaginations + Worries', sid: 'S-112', date: '2026-09-11', img: 'images/UF-20260911-014.jpg' },
+  { id: 'UF-20260911-015', sentence: 'Overwhelmed', sid: 'S-113', date: '2026-09-11', img: 'images/UF-20260911-015.jpg' },
+  { id: 'UF-20260912-001', sentence: 'Regaining Stability', sid: 'S-114', date: '2026-09-12', img: 'images/UF-20260912-001.jpg' },
+  { id: 'UF-20260912-002', sentence: 'Things Are Getting Better. You Can Relax Now.', sid: 'S-115', date: '2026-09-12', img: 'images/UF-20260912-002.png' },
+  { id: 'UF-20260912-003', sentence: 'Slight Grogginess + Drowsiness', sid: 'S-116', date: '2026-09-12', img: 'images/UF-20260912-003.jpg' },
+  { id: 'UF-20260912-004', sentence: 'Waiting', sid: 'S-117', date: '2026-09-12', img: 'images/UF-20260912-004.jpg' },
+  { id: 'UF-20260912-005', sentence: 'Gradually', sid: 'S-118', date: '2026-09-12', img: 'images/UF-20260912-005.jpg' },
+  { id: 'UF-20260912-006', sentence: 'As I Close My Eyes', sid: 'S-119', date: '2026-09-12', img: 'images/UF-20260912-006.jpg' },
+  { id: 'UF-20260912-007', sentence: 'Dizziness', sid: 'S-120', date: '2026-09-12', img: 'images/UF-20260912-007.jpg' },
+  { id: 'UF-20260912-008', sentence: 'What Was That Feeling?', sid: 'S-121', date: '2026-09-12', img: 'images/UF-20260912-008.jpg' },
+  { id: 'UF-20260914-001', sentence: 'Regaining My Calm', sid: 'S-122', date: '2026-09-14', img: 'images/UF-20260914-001.jpg' },
+  { id: 'UF-20260914-002', sentence: 'Gradually', sid: 'S-118', date: '2026-09-14', img: 'images/UF-20260914-002.jpg' },
+  { id: 'UF-20260914-003', sentence: 'Humming Again', sid: 'S-123', date: '2026-09-14', img: 'images/UF-20260914-003.jpg' },
+  { id: 'UF-20260914-004', sentence: 'Peace Finally Found Its Way to Me', sid: 'S-124', date: '2026-09-14', img: 'images/UF-20260914-004.jpg' },
+  { id: 'UF-20260914-005', sentence: 'Reminisce', sid: 'S-125', date: '2026-09-14', img: 'images/UF-20260914-005.jpg' }
+];
+// Optional per-record metadata, e.g. META['UF-20260829-001'] = { time: '14:20', medium: 'Colored pencil' }
+const META = {
+  'UF-20260909-001': { trigger: 'Song: The Death of Peace of Mind, Bad Omens' },
+  'UF-20260908-006': { trigger: 'Perfume: Oud Wood, Tom Ford' },
+  'UF-20260908-002': { trigger: 'Song: Hymn for the Weekend, Coldplay' }
+};
+
+
+const FIELDS = [
+  { title: 'A · IDENTIFICATION', kind: 'RECORDED', rows: [
+    ['01','Record ID', r => r.id], ['02','Original sentence', r => r.hasSentence ? r.sentence : 'Left blank'], ['03','Sentence ID', r => r.hasSentence ? r.sid : 'None'],
+    ['04','Date', r => fmtLong(r.date)], ['05','Time', r => m(r,'time')] ] },
+  { title: 'B · CONTEXT', kind: 'RECORDED', rows: [
+    ['06','Location', r => m(r,'location')], ['07','Weather', r => m(r,'weather')], ['08','Temperature', r => m(r,'temperature')],
+    ['09','Atmosphere', r => m(r,'atmosphere')], ['10','Sensory trigger', r => m(r,'trigger')] ] },
+  { title: 'C · MATERIAL AND FORM', kind: 'OBSERVED', rows: [
+    ['11','Drawing medium', r => f(r,0)], ['12','Color palette', r => f(r,1)], ['13','Visual density', r => f(r,2)],
+    ['14','Line quality', r => f(r,3)], ['15','Composition', r => f(r,4)], ['16','Shape behavior', r => f(r,5)] ] },
+  { title: 'D · ARCHIVAL RELATIONSHIPS', kind: 'SYSTEM', rows: [
+    ['17','Repetition group', r => { const p = []; if (r.total > 1) p.push('Same sentence: ' + r.sid); const w = r.words.filter(x => byWord[x].length > 1); if (w.length) p.push('Shared words: ' + w.map(x => labelOf(x).toLowerCase()).join(', ')); return p.length ? p.join(' / ') : 'None'; }], ['18','Occurrence', r => r.occ],
+    ['19','Related record IDs', r => { const ids = recs.filter(x => x.i !== r.i && x.key === r.key).map(x => x.id); return ids.length ? ids.join(', ') : 'None'; }], ['20',"Artist's notes", r => m(r,'notes')] ] }
+];
+
+/* =========================================================
+   MATERIAL AND FORM (fields 11 to 16)
+   Written from looking at each drawing. Edit freely.
+   [medium, color palette, visual density, line quality, composition, shape behavior]
+   ========================================================= */
+const FORM = {
+  'UF-20260829-001': ["Colored pencil", "Pink, red, black", "Dense", "Soft textured shading", "Single elongated oval, dark core to one side", "Dissolving at edges"],
+  'UF-20260829-002': ["Colored pencil", "Blue, black", "Dense", "Soft textured shading, darkest at center", "Single centered circle with dark core", "Radiating from center"],
+  'UF-20260829-003': ["Watercolor", "Gray, rust red, dark blue", "Dense", "Fluid wash with pooled edges", "Single mass with a band and block inside", "Contained"],
+  'UF-20260829-004': ["Colored pencil", "Yellow-green, orange, pink", "Moderate", "Soft textured shading", "Single elongated diagonal form", "Spreading"],
+  'UF-20260831-001': ["Colored pencil", "Yellow-green, orange, brown, blue, pink", "Dense", "Soft textured shading", "Single irregular mass with several color centers", "Overlapping"],
+  'UF-20260831-002': ["Colored pencil", "Yellow, orange, green, red", "Dense", "Soft textured shading, concentric", "Single irregular mass with off-center core", "Overlapping"],
+  'UF-20260831-003': ["Colored pencil", "Purple, pink", "Moderate", "Soft textured shading", "Single centered mass", "Radiating from center"],
+  'UF-20260831-004': ["Colored pencil", "Dark green, black, red, pink", "Dense", "Soft textured shading", "Single mass with two cores side by side", "Overlapping"],
+  'UF-20260831-005': ["Graphite pencil", "Gray", "Moderate", "Soft smudged shading", "Single irregular mass", "Dissolving at edges"],
+  'UF-20260902-001': ["Watercolor", "Yellow-green, green, blue, purple, red", "Dense", "Fluid wash with small drops", "Layered mass with a central band", "Spreading"],
+  'UF-20260902-002': ["Colored pencil", "Pink, orange, yellow-green", "Moderate", "Soft textured shading", "Horizontal elongated form with small round lobes", "Drifting"],
+  'UF-20260903-001': ["Graphite pencil", "Gray", "Sparse", "Soft textured shading in small circles", "Diagonal chain of linked circles", "Linked"],
+  'UF-20260903-002': ["Watercolor", "Sage green, blue, yellow, ochre, red", "Dense", "Fluid wash", "Single mass with red spots at one edge", "Spilling at edge"],
+  'UF-20260903-003': ["Graphite pencil", "Gray", "Moderate", "Soft textured shading", "Vertical winding chain of blobs", "Meandering"],
+  'UF-20260903-004': ["Watercolor", "Gray-teal, mauve, green, brown, blue, yellow, orange", "Moderate", "Fluid wash with broken edges", "Several connected forms in a row", "Fragmenting"],
+  'UF-20260903-005': ["Graphite pencil", "Gray", "Moderate", "Lacy looping texture with open holes", "Vertical form with hanging parts", "Dripping downward"],
+  'UF-20260903-006': ["Graphite pencil", "Gray", "Sparse", "Loose looping lines", "Single tangled cluster", "Tangled"],
+  'UF-20260903-007': ["Colored pencil", "Yellow-green, orange", "Moderate", "Soft textured shading", "Single rounded mass with a broken edge", "Radiating from center"],
+  'UF-20260906-001': ["Watercolor", "Orange, yellow, pink, green", "Dense", "Fluid wash with lacy center", "Crescent mass with a central cluster", "Blooming"],
+  'UF-20260906-002': ["Graphite pencil", "Gray", "Dense", "Dense scribble with loops at the edge", "Single centered mass", "Radiating from center"],
+  'UF-20260906-003': ["Colored pencil", "Blue, teal, gray", "Dense", "Soft textured shading", "Single tilted oval", "Contained"],
+  'UF-20260906-004': ["Watercolor", "Rust orange, maroon, blue", "Dense", "Fluid wash", "Curling band around an opening", "Curling"],
+  'UF-20260906-005': ["Colored pencil", "Orange, teal, pink, purple", "Moderate", "Soft textured shading", "Vertical stem joined to a round form", "Bending"],
+  'UF-20260906-006': ["Colored pencil", "Yellow, pink, blue, orange", "Sparse", "Small dense dabs", "Scattered small forms", "Scattered"],
+  'UF-20260906-007': ["Watercolor", "Ochre, purple, blue", "Dense", "Fluid wash", "Nested rings around a core", "Concentric"],
+  'UF-20260906-008': ["Graphite pencil", "Black", "Sparse", "Short broken marks", "Scattered marks around a dark center", "Scattered"],
+  'UF-20260906-009': ["Graphite pencil", "Black", "Moderate", "Horizontal back-and-forth strokes", "Circle filled with stacked lines", "Stacked"],
+  'UF-20260906-010': ["Watercolor", "Crimson", "Dense", "Saturated wash with a darker ring", "Single centered circle", "Contained"],
+  'UF-20260906-011': ["Graphite pencil", "Gray, black", "Moderate", "Soft textured shading in separate blobs", "Clustered fragments", "Fragmenting"],
+  'UF-20260906-012': ["Colored pencil", "Pink, gray", "Moderate", "Soft textured shading", "Single centered circle", "Radiating from center"],
+  'UF-20260906-013': ["Colored pencil", "Red, yellow-green, blue, purple", "Dense", "Soft textured shading in bands", "Nested rings", "Concentric"],
+  'UF-20260907-001': ["Colored pencil", "Red, pink", "Moderate", "Lacy textured shading with holes", "Irregular vertical cluster", "Fragmenting"],
+  'UF-20260907-002': ["Graphite pencil", "Gray", "Sparse", "Loose looping lines", "Small spirals inside large loops", "Spiraling"],
+  'UF-20260907-003': ["Black pen", "Black", "Moderate", "Heavy tangled lines with broken bits", "Tangled cluster with scattered marks below", "Tangled"],
+  'UF-20260907-004': ["Graphite pencil", "Gray, black", "Moderate", "Dense shaded core with loose outline rings", "Core with surrounding rings", "Concentric"],
+  'UF-20260907-005': ["Graphite pencil", "Gray", "Moderate", "Soft textured shading", "Single horizontal oval", "Radiating from center"],
+  'UF-20260908-001': ["Colored pencil", "Blue-violet, gray", "Moderate", "Loose looping lines over shading", "Single horizontal mass with looping edge", "Spreading"],
+  'UF-20260908-002': ["Watercolor", "Orange, blue, gray", "Dense", "Fluid wash", "Core with surrounding ring", "Concentric"],
+  'UF-20260908-003': ["Colored pencil", "Yellow-green, orange-red", "Moderate", "Soft textured shading", "Elongated diagonal oval with off-center core", "Spreading"],
+  'UF-20260908-004': ["Watercolor + colored pencil", "Green, orange", "Moderate", "Wash core with loose pencil rings", "Core with surrounding ring", "Enclosed"],
+  'UF-20260908-005': ["Watercolor + colored pencil", "Brown, lavender", "Sparse", "Loose looping rings around a wash core", "Core with surrounding rings", "Enclosed"],
+  'UF-20260908-006': ["Watercolor", "Purple, blue, black, teal, orange, yellow", "Dense", "Fluid wash", "Crescent with small floating spots", "Curling"],
+  'UF-20260908-007': ["Graphite pencil", "Gray", "Sparse", "Soft textured shading in blobs", "Scattered fragments, thinning toward the bottom", "Scattered"],
+  'UF-20260908-008': ["Colored pencil", "Pink, magenta", "Moderate", "Soft textured shading", "Single centered mass", "Radiating from center"],
+  'UF-20260908-009': ["Pen", "Navy blue", "Moderate", "Loose spiraling lines", "Spiral", "Spiraling"],
+  'UF-20260908-010': ["Pen", "Navy, black, red", "Dense", "Tangled looping lines with a radiating center", "Core with surrounding loops", "Spiraling"],
+  'UF-20260908-011': ["Colored pencil", "Yellow-green, orange, pink, red", "Moderate", "Loose looping lines around a shaded core", "Core with surrounding loose rings", "Radiating from center"],
+  'UF-20260908-012': ["Colored pencil", "Pink, purple, orange, yellow-green, red", "Moderate", "Soft textured shading in small forms", "Scattered small forms", "Scattered"],
+  'UF-20260908-013': ["Graphite pencil", "Gray", "Sparse", "Horizontal zigzag lines", "Stacked horizontal loops", "Oscillating"],
+  'UF-20260908-014': ["Graphite pencil", "Gray", "Moderate", "Dense looping lines around a dot", "Tangled sphere with a center point", "Orbiting"],
+  'UF-20260908-015': ["Colored pencil", "Navy, olive, orange, maroon", "Moderate", "Vertical stacked loops", "Horizontal band with a trailing curl", "Oscillating"],
+  'UF-20260908-016': ["Watercolor", "Orange, yellow", "Dense", "Fluid wash", "Single rounded mass with a light core", "Glowing from center"],
+  'UF-20260908-017': ["Watercolor", "Blue", "Dense", "Fluid wash with broken edges", "Single irregular mass", "Spreading"],
+  'UF-20260908-018': ["Marker", "Black, navy, red", "Dense", "Tight concentric lines", "Spiral around a small core", "Concentric"],
+  'UF-20260908-019': ["Marker", "Teal, green, light blue", "Dense", "Flat saturated bands", "Nested rings", "Concentric"],
+  'UF-20260908-020': ["Marker", "Green, blue, purple, red, pink", "Dense", "Flat bands with a dotted core", "Nested oval rings", "Concentric"],
+  'UF-20260908-021': ["Marker + colored pencil", "Crimson, khaki", "Moderate", "Flat core with a loose outer ring", "Core with surrounding ring", "Enclosed"],
+  'UF-20260908-022': ["Marker", "Teal, yellow-green", "Dense", "Saturated fill with petal edges", "Single centered form with scalloped edge", "Radiating from center"],
+  'UF-20260908-023': ["Marker + colored pencil", "Pink, yellow, khaki", "Moderate", "Concentric bands", "Nested rings", "Concentric"],
+  'UF-20260908-024': ["Marker", "Blue, light blue, teal", "Dense", "Flat bands", "Nested oval rings", "Concentric"],
+  'UF-20260908-025': ["Marker + colored pencil", "Blue-violet, teal, crimson, yellow, green", "Dense", "Concentric bands", "Nested rings", "Concentric"],
+  'UF-20260908-026': ["Marker + colored pencil", "Purple, yellow, teal", "Dense", "Concentric bands", "Nested vertical oval rings", "Concentric"],
+  'UF-20260908-027': ["Pen", "Navy, red, black", "Moderate", "Tangled looping lines", "Tangled center with loops above and below", "Tangled"],
+  'UF-20260908-028': ["Colored pencil", "Yellow, orange, red", "Dense", "Soft textured shading", "Single centered mass", "Radiating from center"],
+  'UF-20260909-001': ["Marker", "Black, plum", "Moderate", "Dotted marks", "Scattered dots forming a round field", "Scattered"],
+  'UF-20260909-002': ["Graphite pencil", "Gray", "Sparse", "Wavering concentric lines", "Nested rings, off-center", "Concentric"],
+  'UF-20260909-003': ["Graphite pencil", "Gray", "Sparse", "Soft shaded dots and a wavy line", "Vertical chain of small circles ending in a squiggle", "Descending"],
+  'UF-20260909-004': ["Graphite pencil", "Dark gray", "Moderate", "Heavy spiraling strokes", "Spiral around a dark core", "Spiraling"],
+  'UF-20260909-005': ["Colored pencil + pen", "Pink, lavender, teal", "Moderate", "Soft shading with small dots", "Single vertical elongated form", "Contained"],
+  'UF-20260909-006': ["Graphite pencil", "Gray", "Sparse", "Loose looping lines", "Single tangled cluster", "Tangled"],
+  'UF-20260909-007': ["Marker", "Teal, red, beige", "Sparse", "Thin layered bands", "Horizontal bar inside an outline", "Stretched"],
+  'UF-20260909-008': ["Graphite pencil", "Black, gray", "Dense", "Dense textured shading", "Thick ring with empty center", "Hollow"],
+  'UF-20260909-009': ["Graphite pencil", "Gray", "Dense", "Dense textured shading", "Single elongated diagonal form", "Stretched"],
+  'UF-20260909-010': ["Graphite pencil", "Black", "Moderate", "Small looping scribbles", "Scattered small loops", "Scattered"],
+  'UF-20260909-011': ["Graphite pencil", "Gray", "Moderate", "Broad looping bands", "Tangled ribbon loops", "Overlapping"],
+  'UF-20260909-012': ["Watercolor", "Rust, purple, dark navy", "Dense", "Fluid wash broken into patches", "Dark core with scattered fragments", "Fragmenting"],
+  'UF-20260909-013': ["Graphite pencil", "Gray", "Sparse", "Concentric lines with a shaded core", "Nested vertical oval rings", "Concentric"],
+  'UF-20260909-014': ["Watercolor + pen", "Rust, yellow, green, orange", "Moderate", "Wash bands with a loose pen outline", "Nested oval with an outline", "Concentric"],
+  'UF-20260909-015': ["Colored pencil", "Pink, orange, yellow-green, purple", "Moderate", "Shaded fills with outlines", "Overlapping oval forms", "Overlapping"],
+  'UF-20260909-016': ["Colored pencil", "Ochre yellow, yellow-green", "Moderate", "Loose looping lines", "Single tangled cluster", "Tangled"],
+  'UF-20260909-017': ["Colored pencil + marker", "Orange, maroon, pale blue", "Dense", "Shaded bands with three dark spots", "Nested irregular shape with three cores", "Concentric"],
+  'UF-20260909-018': ["Colored pencil", "Yellow-green, pink", "Moderate", "Soft textured shading in bands", "Nested rings", "Concentric"],
+  'UF-20260909-019': ["Colored pencil", "Pink, crimson", "Moderate", "Shaded core with dispersed marks", "Core breaking into scattered texture", "Dissolving at edges"],
+  'UF-20260909-020': ["Colored pencil", "Brown-gray, purple, pink, yellow", "Dense", "Soft textured shading in bands", "Nested rings", "Concentric"],
+  'UF-20260909-021': ["Graphite pencil", "Brown-gray", "Sparse", "Soft shaded small blobs", "Scattered fragments", "Scattered"],
+  'UF-20260909-022': ["Watercolor", "Orange", "Dense", "Flat saturated fill", "Single centered circle", "Contained"],
+  'UF-20260909-023': ["Colored pencil", "Crimson, pale pink", "Moderate", "Soft textured shading", "Two stacked circles, one dark and one faint", "Splitting"],
+  'UF-20260909-024': ["Marker + colored pencil", "Burgundy, ochre", "Moderate", "Shaded core with a thin outer ring", "Core with surrounding ring", "Enclosed"],
+  'UF-20260909-025': ["Marker", "Teal, coral", "Dense", "Flat bands", "Nested vertical oval rings", "Concentric"],
+  'UF-20260909-026': ["Graphite pencil", "Black, gray", "Moderate", "Tight spiraling lines", "Spiral", "Spiraling"],
+  'UF-20260909-027': ["Colored pencil", "Orange", "Moderate", "Loose looping lines with a dense center", "Tangled cluster with petal-like loops", "Radiating from center"],
+  'UF-20260909-028': ["Colored pencil", "Dark purple, gray", "Dense", "Soft textured shading", "Single centered mass", "Radiating from center"],
+  'UF-20260909-029': ["Colored pencil", "Purple, gray", "Moderate", "Circular strokes around an open center", "Ring with empty center", "Hollow"],
+  'UF-20260909-030': ["Colored pencil + marker", "Purple, orange, olive, blue", "Dense", "Concentric bands", "Nested rings around a blue core", "Concentric"],
+  'UF-20260909-031': ["Marker", "Yellow-green, teal, orange", "Moderate", "Flat bands with a dotted ring", "Horizontal capsule with a core", "Stretched"],
+  'UF-20260910-001': ["Colored pencil", "Purple", "Moderate", "Loose looping lines", "Single tangled cluster", "Tangled"],
+  'UF-20260910-002': ["Graphite pencil", "Gray", "Sparse", "Horizontal zigzag lines", "Stacked horizontal loops", "Oscillating"],
+  'UF-20260910-003': ["Marker", "Orange", "Dense", "Thick looping strokes", "Loops around an oval core", "Circling"],
+  'UF-20260910-004': ["Colored pencil", "Crimson", "Moderate", "Tangled looping lines", "Single tangled cluster", "Tangled"],
+  'UF-20260910-005': ["Colored pencil + marker", "Yellow ochre, red", "Dense", "Shaded fill with an outlined core", "Oval with a ring and a red core", "Concentric"],
+  'UF-20260910-006': ["Colored pencil", "Crimson, purple", "Dense", "Soft textured shading", "Single centered mass", "Radiating from center"],
+  'UF-20260910-007': ["Colored pencil + marker", "Pink, magenta", "Sparse", "Thin outlined ring with soft shading", "Flat horizontal ring", "Hollow"],
+  'UF-20260911-001': ["Graphite pencil", "Gray", "Sparse", "Angular tangled lines", "Tangled cluster with a pointed spike", "Tangled"],
+  'UF-20260911-002': ["Graphite pencil", "Black, gray", "Sparse", "Short curved marks", "Scattered small marks", "Scattered"],
+  'UF-20260911-003': ["Colored pencil + marker", "Ochre, gray, black", "Moderate", "Shaded fill with a hard black outline", "Vertical form traced by a jagged line", "Angular"],
+  'UF-20260911-004': ["Graphite pencil", "Gray, black", "Sparse", "Tangled looping lines", "Tangled cluster with one long outer loop", "Tangled"],
+  'UF-20260911-005': ["Colored pencil", "Black, navy, gray-blue", "Dense", "Heavy tangled strokes", "Single tangled cluster", "Tangled"],
+  'UF-20260911-006': ["Colored pencil", "Magenta, beige, black", "Moderate", "Loose looping lines around a shaded core", "Dark core inside loose loops", "Tangled"],
+  'UF-20260911-007': ["Colored pencil", "Black, brown-gray", "Dense", "Concentric textured shading", "Nested oval rings, darkest at the edge", "Concentric"],
+  'UF-20260911-008': ["Colored pencil", "Yellow-green, pink", "Dense", "Concentric textured shading", "Nested oval rings", "Concentric"],
+  'UF-20260911-009': ["Colored pencil", "Orange, gray, teal", "Moderate", "Soft textured shading", "Curved vertical crescent with a small tail", "Bending"],
+  'UF-20260911-010': ["Colored pencil", "Purple, lavender", "Moderate", "Shaded core with loose outer loops", "Core with surrounding loops", "Radiating from center"],
+  'UF-20260911-011': ["Colored pencil", "Red, orange", "Dense", "Soft textured shading", "Single vertical oval", "Radiating from center"],
+  'UF-20260911-012': ["Colored pencil", "Blue-violet", "Dense", "Soft textured shading", "Single vertical oval", "Contained"],
+  'UF-20260911-013': ["Colored pencil", "Brown-gray", "Moderate", "Looping lines over shading", "Vertical tangled cluster", "Tangled"],
+  'UF-20260911-014': ["Colored pencil", "Yellow-green", "Dense", "Dense looping lines", "Single round tangled mass", "Circling"],
+  'UF-20260911-015': ["Colored pencil", "Salmon pink, olive, crimson", "Moderate", "Loose looping lines with a cross-shaped core", "Cross-shaped core inside loops", "Radiating from center"],
+  'UF-20260912-001': ["Colored pencil", "Navy blue, gray", "Dense", "Soft textured shading", "Single irregular mass", "Contained"],
+  'UF-20260912-002': ["Colored pencil", "Pink, coral, orange", "Moderate", "Loose textured hatching", "Single centered mass", "Dissolving at edges"],
+  'UF-20260912-003': ["Colored pencil", "Pink, mauve, gray", "Moderate", "Loose looping lines over shading", "Vertical cluster", "Tangled"],
+  'UF-20260912-004': ["Colored pencil + graphite", "Orange, brown, gray", "Moderate", "Soft textured shading", "Oval mass with a small trail below", "Drifting"],
+  'UF-20260912-005': ["Colored pencil + pen", "Yellow-green, pink, brown, purple, black", "Dense", "Shading with small inked circles", "Large mass with circles along one edge", "Overlapping"],
+  'UF-20260912-006': ["Graphite pencil", "Gray, black", "Dense", "Dense scribble with a loose looping edge", "Single centered mass", "Radiating from center"],
+  'UF-20260912-007': ["Pen", "Crimson", "Sparse", "Loose wandering lines", "Open tangled form", "Wandering"],
+  'UF-20260912-008': ["Pen", "Crimson, black", "Moderate", "Overlapping circular loops", "Overlapping circles", "Orbiting"],
+  'UF-20260914-001': ["Graphite pencil", "Gray", "Moderate", "Shading wrapped in vertical loops", "Horizontal capsule wrapped in loops", "Wrapped"],
+  'UF-20260914-002': ["Graphite pencil", "Gray", "Moderate", "Soft textured shading", "Single vertical oval", "Contained"],
+  'UF-20260914-003': ["Graphite pencil", "Gray", "Dense", "Lacy looping texture with holes", "Single round mass", "Open"],
+  'UF-20260914-004': ["Graphite pencil", "Gray", "Dense", "Soft blurred texture", "Single round mass", "Dissolving at edges"],
+  'UF-20260914-005': ["Graphite pencil", "Gray", "Sparse", "Small looping marks", "Ring of small loops with an empty center", "Hollow"]
+};
+
+/* ========== helpers ========== */
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const parse = s => { const [y,mo,d] = s.split('-').map(Number); return new Date(y, mo-1, d); };
+const fmtShort = s => s.split('-').reverse().join('.');
+const fmtLong = s => { const d = parse(s); return `${DAYS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; };
+const f = (r, i) => (FORM[r.id] && FORM[r.id][i]) || null;
+const m = (r, k) => (META[r.id] && META[r.id][k] != null) ? META[r.id][k] : null;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad2 = n => (n < 10 ? '0' : '') + n;
+
+// words ignored when finding shared words
+const STOP = new Set('a an the of to in on at by for with and or but i im me my mine myself is are am was be been it its this that these those so from yet not no oh ah what who how why when where could should would will can do does did going go really very up down out more most little bit like again here there some someone within before through came come get getting got itll right let just all any about into over under too than then also us we you your yes now one another lead'.split(' '));
+// words with the same root count as one word (feel / feeling, happy / happily)
+const ROOTS = { brighter: 'bright', brighten: 'bright', darken: 'dark', happiness: 'happy', happily: 'happy' };
+const FORMS = {};
+// same spelling, different meaning: leave these words out for these records
+// '*' leaves out every word (titles of songs or products, not the artist's own words)
+const NOT_SHARED = { 'UF-20260910-002': ['still'], 'UF-20260909-001': ['*'], 'UF-20260908-006': ['*'], 'UF-20260908-002': ['hymn', 'weekend'] };
+const rootOf = w => {
+  if (ROOTS[w]) return ROOTS[w];
+  let r = w;
+  if (/ily$/.test(r) && r.length > 5) r = r.slice(0, -3) + 'y';
+  else if (/ly$/.test(r) && r.length > 5) r = r.slice(0, -2);
+  else if (/ness$/.test(r) && r.length > 6) r = r.slice(0, -4);
+  else if (/ment$/.test(r) && r.length > 7) r = r.slice(0, -4);
+  else if (/ing$/.test(r) && r.length > 5) { r = r.slice(0, -3); if (/([b-df-hj-np-tv-z])\1$/.test(r) && !/(ll|ss)$/.test(r)) r = r.slice(0, -1); }
+  else if (/ed$/.test(r) && r.length > 5) r = r.slice(0, -2);
+  return ROOTS[r] || r;
+};
+const wordsOf = s => {
+  if (!s) return [];
+  const out = [];
+  s.toLowerCase().replace(/\u2019/g, "'").replace(/'s\b/g, '').replace(/'/g, '').split(/[^a-z]+/).forEach(w => {
+    if (w.length > 3 && /s$/.test(w) && !/(ss|us|is)$/.test(w)) w = w.slice(0, -1);
+    if (w.length < 2 || STOP.has(w)) return;
+    const r = rootOf(w);
+    (FORMS[r] = FORMS[r] || []).includes(w) || FORMS[r].push(w);
+    if (!out.includes(r)) out.push(r);
+  });
+  return out;
+};
+const labelOf = r => (FORMS[r] || [r]).slice().sort((a, b) => a.length - b.length).join(' / ').toUpperCase();
+
+// exact repetition key (case and spacing only), never semantic matching
+// records without a sentence never group together
+const norm = r => r.sentence ? r.sentence.trim().replace(/\s+/g, ' ').toLowerCase() : '__none__' + r.id;
+const counts = {}; RECORDS.forEach(r => { const k = norm(r); counts[k] = (counts[k] || 0) + 1; });
+const seen = {};
+const recs = RECORDS.map((r, i) => {
+  const k = norm(r); seen[k] = (seen[k] || 0) + 1;
+  return { ...r, sentence: r.sentence || '', hasSentence: !!r.sentence, sid: r.sid || 'Not recorded', words: wordsOf(r.sentence).filter(w => { const ns = NOT_SHARED[r.id] || []; return !ns.includes('*') && !ns.includes(w); }), i, key: k, total: counts[k], occ: `${seen[k]} / ${counts[k]}` };
+});
+
+// shared-word classes: records whose sentences contain the same word
+// (lowercase, plural "s" and possessive "'s" removed, common small words ignored)
+const byWord = {};
+recs.forEach(r => r.words.forEach(w => (byWord[w] = byWord[w] || []).push(r)));
+const wordGroups = (() => {
+  const sets = {};
+  Object.keys(byWord).forEach(w => {
+    const rs = byWord[w]; if (rs.length < 2) return;
+    const k = rs.map(r => r.i).join(',');
+    (sets[k] = sets[k] || { words: [], items: rs }).words.push(w);
+  });
+  return Object.values(sets).sort((a, b) => b.items.length - a.items.length || (a.words[0] < b.words[0] ? -1 : 1));
+})();
+const inWordGroup = new Set(wordGroups.flatMap(g => g.items.map(r => r.i)));
+
+/* ========== state ========== */
+const state = { view: 'grid', q: '', repOnly: false, desc: false, open: null };
+const app = document.getElementById('app');
+const set = patch => { Object.assign(state, patch); render(); };
+
+/* ========== views ========== */
+function cell(r, showCap = true) {
+  return `<button class="cell" data-open="${r.i}" aria-label="Open record ${esc(r.id)}: ${esc(r.sentence)}">
+    <div class="frame"><img src="${esc(r.img)}" alt="Drawing ${esc(r.id)}" loading="lazy"></div>
+    ${showCap ? `<div class="cap"><span>${esc(r.id)}</span><span class="d">${fmtShort(r.date)}</span><span class="s">${esc(r.sentence)}</span></div>` : ''}
+  </button>`;
+}
+function row(r) {
+  return `<button class="row" data-open="${r.i}">
+    <img src="${esc(r.img)}" alt="Drawing ${esc(r.id)}" loading="lazy">
+    <span class="t"><b>${esc(r.sentence)}</b><i>${esc(r.id)}</i></span>
+    <span class="meta"><span>${esc(r.sid)}</span><span>${fmtShort(r.date)}</span><span style="color:var(--mute)">OCC. ${r.occ}</span></span>
+  </button>`;
+}
+
+function indexView() {
+  const q = state.q.trim().toLowerCase();
+  const matchQ = r => !q || r.sentence.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
+  const order = list => state.desc ? list.slice().reverse() : list;
+  // sections: by date normally, by shared word in REPEATED
+  const sections = [];
+  if (state.repOnly) {
+    // exact repeats of the same sentence first, then shared words
+    const done = new Set();
+    recs.forEach(r => {
+      if (r.total < 2 || done.has(r.key)) return;
+      done.add(r.key);
+      const list = order(recs.filter(x => x.key === r.key).filter(matchQ));
+      if (list.length) sections.push({ title: '\u201c' + r.sentence + '\u201d', sub: 'same sentence', list });
+    });
+    wordGroups.forEach(g => {
+      const list = order(g.items.filter(matchQ));
+      if (list.length) sections.push({ title: g.words.map(labelOf).join(' · '), sub: 'shared word', list });
+    });
+  } else {
+    const byDate = {};
+    recs.filter(matchQ).forEach(r => (byDate[r.date] = byDate[r.date] || []).push(r));
+    order(Object.keys(byDate).sort()).forEach(date => {
+      const d = parse(date);
+      sections.push({ title: `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`, sub: DAYS[d.getDay()], list: order(byDate[date]) });
+    });
+  }
+
+  let body = '';
+  if (!sections.length) {
+    body = `<p class="empty">${state.repOnly ? 'No shared words match this search.' : 'No records match this search.'}</p>`;
+  } else {
+    sections.forEach(({ title, sub, list }) => {
+      body += `<div class="dayhead">
+        <h2>${esc(title)} <span>${esc(sub)}</span></h2>
+        <span class="count">${pad2(list.length)} ${list.length === 1 ? 'RECORD' : 'RECORDS'}</span></div>`;
+      body += state.view === 'grid'
+        ? `<div class="grid">${list.map(r => cell(r)).join('')}</div>`
+        : `<div class="list">${list.map(row).join('')}</div>`;
+    });
+  }
+
+  return `<section>
+    <div class="hero">
+      <h1><button data-reset aria-label="Show all records in original order">UNNAMED FEELINGS</button></h1>
+      <p>The Anatomy of Unnamed Feelings</p>
+    </div>
+    <div class="bar">
+      <label><span class="k">SEARCH</span><input id="q" type="text" placeholder="Sentence or record ID" value="${esc(state.q)}"></label>
+      <div class="pair"><span class="k">SORT</span><button class="tog on" data-sort>${state.desc ? 'REVERSE CHRONOLOGICAL' : 'CHRONOLOGICAL'}</button></div>
+      <button class="tog ${state.repOnly ? 'on' : ''}" data-rep aria-pressed="${state.repOnly}">REPEATED</button>
+      <div class="pair" style="gap:16px">
+        <button class="tog ${state.view === 'grid' ? 'on' : ''}" data-view="grid">GRID</button>
+        <button class="tog ${state.view === 'list' ? 'on' : ''}" data-view="list">LIST</button>
+      </div>
+    </div>
+    ${body}
+  </section>`;
+}
+
+function detailView() {
+  const n = recs.length, r = recs[state.open];
+  const same = recs.filter(x => x.key === r.key && x.i !== r.i);
+  const sameDay = recs.filter(x => x.date === r.date && x.i !== r.i);
+  const groups = FIELDS.map(g => `<div>
+    <div class="ghead"><span>${g.title}</span><span>${g.kind}</span></div>
+    ${g.rows.map(([no, k, fn]) => { const v = fn(r);
+      return `<div class="mrow"><span class="n">${no}</span><span class="k">${k}</span><span class="${v == null ? 'nr' : ''}">${esc(v == null ? 'Not recorded' : v)}</span></div>`; }).join('')}
+  </div>`).join('');
+
+  return `<section>
+    <div class="dnav">
+      <button data-home>← INDEX</button>
+      <span><button data-go="-1">PREVIOUS</button><span style="color:rgba(0,0,0,.45)">${r.i + 1} / ${n}</span><button data-go="1">NEXT</button></span>
+    </div>
+    <div class="detail">
+      <div class="frame"><img src="${esc(r.img)}" alt="Drawing ${esc(r.id)}"></div>
+      <div class="dside">
+        <div class="dtitle">
+          <span style="font-size:12px;letter-spacing:.06em">${esc(r.id)}</span>
+          <h1>${esc(r.sentence)}</h1>
+          <span style="color:var(--mute)">${fmtLong(r.date)}</span>
+        </div>
+        ${groups}
+      </div>
+    </div>
+    <div class="block">
+      <h2>OTHER INTERPRETATIONS OF THE SAME SENTENCE</h2>
+      ${same.length ? `<div class="grid">${same.map(x => cell(x)).join('')}</div>`
+        : `<p>This sentence has been recorded once. Other records will appear here if it reoccurs.</p>`}
+    </div>
+    ${(() => {
+      const ws = r.words.map(w => ({ w, others: byWord[w].filter(x => x.i !== r.i) })).filter(g => g.others.length);
+      return ws.length ? `<div class="block"><h2>RECORDS SHARING A WORD</h2>${ws.map(g =>
+        `<div class="ghead" style="margin-top:20px;font-size:12px;letter-spacing:.06em"><span>${esc(labelOf(g.w))}</span><span>${pad2(g.others.length + 1)} RECORDS</span></div><div class="grid">${g.others.map(x => cell(x)).join('')}</div>`).join('')}</div>` : '';
+    })()}
+    ${sameDay.length ? `<div class="block"><h2>SAME DATE · DIFFERENT RECORDS</h2><div class="grid">${sameDay.map(x => cell(x)).join('')}</div></div>` : ''}
+  </section>`;
+}
+
+function render() {
+  app.innerHTML = state.open === null ? indexView() : detailView();
+  const q = document.getElementById('q');
+  if (q && state._focusQ) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+}
+
+/* ========== events ========== */
+document.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.hasAttribute('data-home')) { set({ open: null }); window.scrollTo(0, 0); }
+  else if (t.dataset.open != null) { set({ open: Number(t.dataset.open) }); window.scrollTo(0, 0); }
+  else if (t.dataset.view) set({ view: t.dataset.view });
+  else if (t.hasAttribute('data-rep')) set({ repOnly: !state.repOnly });
+  else if (t.hasAttribute('data-sort')) set({ desc: !state.desc });
+  else if (t.hasAttribute('data-reset')) { set({ view: 'grid', q: '', repOnly: false, desc: false, open: null }); window.scrollTo(0, 0); }
+  else if (t.dataset.go) { const n = recs.length; set({ open: (state.open + Number(t.dataset.go) + n) % n }); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'q') { state._focusQ = true; set({ q: e.target.value }); state._focusQ = false; }
+});
+
+render();
+</script>
+</body>
+</html>
